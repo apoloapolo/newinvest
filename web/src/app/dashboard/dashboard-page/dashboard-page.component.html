@@ -1,12 +1,111 @@
-<div class="w-full p-6 flex justify-center">
-  <mat-button-toggle-group #group="matButtonToggleGroup" (change)="fetchStocks()">
+<div class="w-full mt-9 flex justify-center">
+  <mat-button-toggle-group #group="matButtonToggleGroup" value="today" (change)="changeView()">
     <mat-button-toggle value="today">Ações de hoje</mat-button-toggle>
     <mat-button-toggle value="all">Todas as ações</mat-button-toggle>
     <mat-button-toggle value="simulator">Simulador</mat-button-toggle>
     <mat-button-toggle value="blog">Blog</mat-button-toggle>
+    <mat-button-toggle value="stocksManager">Gerenciar ações</mat-button-toggle>
   </mat-button-toggle-group>
 </div>
 
-<div class="w-full p-6 xl:inline-grid xl:grid-cols-4">
+<div *ngIf="viewStocks" class="w-full p-6 xl:inline-grid xl:grid-cols-4">
     <app-stock-card *ngFor="let stock of stocks" [stock]="stock"></app-stock-card>
+</div>
+
+<div *ngIf="viewSimulator"></div>
+
+<div *ngIf="viewBlog"></div>
+
+<div *ngIf="viewStocksManager" class="p-12 flex justify-center gap-52">
+  <mat-accordion>
+    <div class="mb-3 text-xl font-medium text-center">Lista de ações</div>
+    <mat-expansion-panel *ngFor="let stock of stocks">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-medium">
+          {{stock.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+          <p>{{stock.date}}</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form class="flex flex-col">
+        <mat-form-field class="w-96">
+          <mat-label>Nome</mat-label>
+          <input matInput #nameUpdateInput value="{{stock.name}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>Preço</mat-label>
+          <input matInput #priceUpdateInput type="number" value="{{stock.price}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>Variação</mat-label>
+          <input matInput #variationUpdateInput type="number" value="{{stock.variation}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>Data</mat-label>
+          <input matInput #dateUpdateInput value="{{stock.date}}">
+        </mat-form-field>
+
+        <div class="flex justify-between">
+          <button mat-raised-button
+                  type="submit"
+                  (click)="updateStock(stock.id,
+                  nameUpdateInput.value,
+                  priceUpdateInput.value,
+                  variationUpdateInput.value,
+                  dateUpdateInput.value)"
+                  [disabled]="isChanging">Atualizar</button>
+          <button mat-raised-button
+                  color="warn"
+                  type="submit"
+                  (click)="deleteStock(stock.id)"
+                  [disabled]="isChanging">Excluir</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div>
+    <div class="mb-3 text-xl font-medium text-center">Adicionar ação</div>
+    <mat-card>
+      <mat-card-content>
+        <form class="flex flex-col">
+          <mat-form-field class="w-96">
+            <mat-label>Nome</mat-label>
+            <input matInput #nameCreateInput>
+          </mat-form-field>
+
+          <mat-form-field class="w-96">
+            <mat-label>Preço</mat-label>
+            <input matInput #priceCreateInput type="number">
+          </mat-form-field>
+
+          <mat-form-field class="w-96">
+            <mat-label>Variação</mat-label>
+            <input matInput #variationCreateInput type="number">
+          </mat-form-field>
+
+          <mat-form-field class="w-96">
+            <mat-label>Data</mat-label>
+            <input matInput #dateCreateInput>
+          </mat-form-field>
+
+          <span class="mb-4 self-center">{{messageCreate}}</span>
+
+          <button mat-raised-button
+                  type="submit"
+                  class="w-1/3 self-center"
+                  (click)="createStock(
+                  nameCreateInput.value,
+                  priceCreateInput.value,
+                  variationCreateInput.value,
+                  dateCreateInput.value)"
+                  [disabled]="isChanging">Adicionar</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

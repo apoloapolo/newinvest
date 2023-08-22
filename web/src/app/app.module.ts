@@ -10,6 +10,7 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt'
 import { LOCALE_ID } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LoginModule } from './login/login.module';
 
 registerLocaleData(localePt);
 
@@ -23,6 +24,7 @@ registerLocaleData(localePt);
     DashboardModule,
     SharedModule,
     BrowserAnimationsModule,
+    LoginModule,
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'pt-BR'}

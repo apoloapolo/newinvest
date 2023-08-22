@@ -13,16 +13,14 @@
 }
 
 * {
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
 
-html, body{
+html, body {
     height: 100%;
     width: 100%;
-    margin: 0;
     background-color: var(--backgroud-color);
     font-family: 'Segoe UI', sans-serif;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { font-family: Roboto, "Helvetica Neue", sans-serif; }

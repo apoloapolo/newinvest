@@ -4,12 +4,12 @@ from bd import noticias
 app = Flask(__name__)
 
 # Consulta todas as notícias
-@app.route('localhost/noticias', methods=['GET'])
+@app.route('/localhost/noticias', methods=['GET'])
 def obterNoticias():
     return jsonify(noticias)
 
 # Deleta notícia por ID
-@app.route('localhost/noticias/<int:id>', methods=['DELETE'])
+@app.route('/localhost/noticias/<int:id>', methods=['DELETE'])
 def excluirNoticia(id):
     for i, noticia in enumerate(noticias):
         if noticia.get('id') == id:
@@ -17,7 +17,7 @@ def excluirNoticia(id):
             return jsonify(noticia)
 
 # Atualiza notícia por ID
-@app.route('localhost/noticias/<int:id>', methods=['PUT'])
+@app.route('/localhost/noticias/<int:id>', methods=['PUT'])
 def editarNoticia(id):
     noticiaEditada = request.get_json()
     for i, noticia in enumerate(noticias):
@@ -27,7 +27,7 @@ def editarNoticia(id):
             return jsonify(noticiaEditada)
 
 # Cria notícia por ID
-@app.route('localhost/noticias', methods=['POST'])
+@app.route('/localhost/noticias', methods=['POST'])
 def criarNoticia():
     pegaJson = request.get_json()
     id = autoIncrementarId()

@@ -30,6 +30,7 @@ def realizaSimulacao(id, dias):
         "simulacao": round(preco, 2),
         "sera": investirAcao(data, preco, meses)
     }
+    response.headers.add('Access-Control-Allow-Origin', '*')
     
     return jsonify(response)
 

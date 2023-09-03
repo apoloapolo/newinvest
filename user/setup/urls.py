@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from usuario.views import UsuariosViewSet,UsuarioPorEmailView, UsuarioPorEmailSenhaView
+from usuario.views import UsuariosViewSet,UsuarioPorEmailView, UsuarioPorEmailSenhaView, UsuarioPorEmailViewTodos
 from rest_framework import routers
 
 from rest_framework import permissions
@@ -38,6 +38,7 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register('usuario', UsuariosViewSet, basename='Usuarios')
+router.register('usuarioList', UsuarioPorEmailViewTodos, basename='UsuariosEmail')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

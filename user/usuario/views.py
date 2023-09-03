@@ -1,6 +1,6 @@
 from rest_framework import viewsets, filters
 from usuario.models import Usuario
-from .serializer import UsuarioSerializer
+from .serializer import UsuarioSerializer, UsuarioSerializerEmail
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 
@@ -26,3 +26,8 @@ class UsuarioPorEmailSenhaView(generics.RetrieveAPIView):
         email = self.kwargs['email']
         senha = self.kwargs['senha']
         return self.queryset.get(email=email, senha=senha)
+
+class UsuarioPorEmailViewTodos(viewsets.ModelViewSet):
+    """Exibindo todos os usuarios"""
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializerEmail

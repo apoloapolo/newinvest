@@ -1,22 +1,68 @@
 <div class="w-full mt-9 flex justify-center">
-  <mat-button-toggle-group #group="matButtonToggleGroup" value="today" (change)="changeView()">
+  <mat-button-toggle-group #group="matButtonToggleGroup" value="today" (change)="changeView(group.value)">
     <mat-button-toggle value="today">Ações de hoje</mat-button-toggle>
     <mat-button-toggle value="all">Todas as ações</mat-button-toggle>
     <mat-button-toggle value="simulator">Simulador</mat-button-toggle>
     <mat-button-toggle value="blog">Blog</mat-button-toggle>
     <mat-button-toggle value="stocksManager">Gerenciar ações</mat-button-toggle>
+    <mat-button-toggle value="blogManager">Gerenciar blog</mat-button-toggle>
   </mat-button-toggle-group>
 </div>
 
-<div *ngIf="viewStocks" class="w-full p-6 xl:inline-grid xl:grid-cols-4">
-    <app-stock-card *ngFor="let stock of stocks" [stock]="stock"></app-stock-card>
+<div *ngIf="viewStocks" class="m-6 flex flex-row flex-wrap justify-center">
+  <app-stock-card *ngFor="let stock of stocks" [stock]="stock"></app-stock-card>
 </div>
 
-<div *ngIf="viewSimulator"></div>
+<div *ngIf="viewSimulator" class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-card>
+    <mat-card-content>
+      <form class="flex flex-col">
+        <mat-form-field class="w-96">
+          <mat-label>Selecione uma ação</mat-label>
+          <mat-select #selectStockSimulation>
+            <mat-option *ngFor="let stock of stocks" value="{{stock.id}}">
+              <b>{{stock.name}}</b> | {{stock.price | currency: 'BRL'}} | {{stock.variation}}%
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-<div *ngIf="viewBlog"></div>
+        <mat-form-field class="w-96">
+          <mat-label>Dias</mat-label>
+          <input matInput #daysStockSimulation>
+        </mat-form-field>
 
-<div *ngIf="viewStocksManager" class="p-12 flex justify-center gap-52">
+        <span *ngIf="showMessageSimulator" class="mb-4 self-center w-96">
+          Em <b>{{simulation.dias}} dias</b>, esse investimento vai valer <b>{{simulation.simulacao | currency: 'BRL'}}</b>
+          e é considerado <b>{{simulation.sera}}</b>.
+        </span>
+
+        <button mat-raised-button
+                type="submit"
+                class="w-1/3 self-center"
+                (click)="doSimulation(
+                selectStockSimulation.value,
+                daysStockSimulation.value)"
+                [disabled]="isLoading">Simular</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="viewBlog" class="m-8 flex flex-col flex-wrap justify-center">
+  <mat-card *ngFor="let n of news" class="m-4 w-1/2 self-center">
+    <mat-card-header class="mb-4">
+      <mat-card-title class="text-xl font-medium">{{n.titulo}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="mt-4 first-letter:text-7xl first-letter:font-bold first-letter:mr-3 first-letter:float-left whitespace-pre-line">
+      {{n.descricao}}
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="viewStocksManager" class="m-12 flex flex-row flex-wrap justify-center gap-20">
   <mat-accordion>
     <div class="mb-3 text-xl font-medium text-center">Lista de ações</div>
     <mat-expansion-panel *ngFor="let stock of stocks">
@@ -57,12 +103,12 @@
                   priceUpdateInput.value,
                   variationUpdateInput.value,
                   dateUpdateInput.value)"
-                  [disabled]="isChanging">Atualizar</button>
+                  [disabled]="isLoading">Atualizar</button>
           <button mat-raised-button
                   color="warn"
-                  type="submit"
+                  type="reset"
                   (click)="deleteStock(stock.id)"
-                  [disabled]="isChanging">Excluir</button>
+                  [disabled]="isLoading">Excluir</button>
         </div>
       </form>
     </mat-expansion-panel>
@@ -103,7 +149,74 @@
                   priceCreateInput.value,
                   variationCreateInput.value,
                   dateCreateInput.value)"
-                  [disabled]="isChanging">Adicionar</button>
+                  [disabled]="isLoading">Adicionar</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div *ngIf="viewBlogManager" class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-accordion>
+    <div class="mb-3 text-xl font-medium text-center">Lista de notícias</div>
+    <mat-expansion-panel *ngFor="let n of news">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-medium w-96">
+          {{n.titulo}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form class="flex flex-col">
+        <mat-form-field class="w-96">
+          <mat-label>Título</mat-label>
+          <input matInput #titleUpdateInput value="{{n.titulo}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput #descriptionUpdateInput value="{{n.descricao}}"></textarea>
+        </mat-form-field>
+
+        <div class="flex justify-between">
+          <button mat-raised-button
+                  type="submit"
+                  (click)="updateNews(n.id,
+                  titleUpdateInput.value,
+                  descriptionUpdateInput.value)"
+                  [disabled]="isLoading">Atualizar</button>
+          <button mat-raised-button
+                  color="warn"
+                  type="reset"
+                  (click)="deleteNews(n.id)"
+                  [disabled]="isLoading">Excluir</button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div>
+    <div class="mb-3 text-xl font-medium text-center">Adicionar notícia</div>
+    <mat-card>
+      <mat-card-content>
+        <form class="flex flex-col">
+          <mat-form-field class="w-96">
+            <mat-label>Título</mat-label>
+            <input matInput #titleCreateInput>
+          </mat-form-field>
+
+          <mat-form-field class="w-96">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput #descriptionCreateInput></textarea>
+          </mat-form-field>
+
+          <span class="mb-4 self-center">{{messageCreate}}</span>
+
+          <button mat-raised-button
+                  type="submit"
+                  class="w-1/3 self-center"
+                  (click)="createNews(
+                  titleCreateInput.value,
+                  descriptionCreateInput.value)"
+                  [disabled]="isLoading">Adicionar</button>
         </form>
       </mat-card-content>
     </mat-card>

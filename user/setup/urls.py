@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from usuario.views import UsuariosViewSet
+from usuario.views import UsuariosViewSet,UsuarioPorEmailView, UsuarioPorEmailSenhaView
 from rest_framework import routers
 
 from rest_framework import permissions
@@ -43,4 +43,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('usuario/<str:email>/', UsuarioPorEmailView.as_view(), name='usuario-por-email'),
+    path('usuario/<str:email>/<str:senha>/', UsuarioPorEmailSenhaView.as_view(), name='usuario-por-email-e-senha'),  
 ]

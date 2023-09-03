@@ -6,7 +6,9 @@ app = Flask(__name__)
 # Consulta todas as notícias
 @app.route('/noticias', methods=['GET'])
 def obterNoticias():
-    return jsonify(noticias)
+    response = jsonify(noticias)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 # Deleta notícia por ID
 @app.route('/noticias/<int:id>', methods=['DELETE'])
@@ -14,7 +16,9 @@ def excluirNoticia(id):
     for i, noticia in enumerate(noticias):
         if noticia.get('id') == id:
             del noticias[i]
-            return jsonify(noticia)
+            response = jsonify(noticia)
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response
 
 # Atualiza notícia por ID
 @app.route('/noticias/<int:id>', methods=['PUT'])
@@ -24,7 +28,9 @@ def editarNoticia(id):
         print(i, noticia.get('id'))
         if noticia.get('id') == id:
             noticias[i].update(noticiaEditada)
-            return jsonify(noticiaEditada)
+            response = jsonify(noticiaEditada)
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            return response
 
 # Cria notícia por ID
 @app.route('/noticias', methods=['POST'])
@@ -33,6 +39,7 @@ def criarNoticia():
     id = autoIncrementarId()
     pegaJson["id"] = id
     noticias.append(pegaJson)
+    pegaJson.headers.add('Access-Control-Allow-Origin', '*')
     return pegaJson
 
 def autoIncrementarId():
@@ -46,4 +53,3 @@ def autoIncrementarId():
     return i
     
 app.run(host='localhost', port=9090)
-

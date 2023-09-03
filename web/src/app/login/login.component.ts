@@ -6,8 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  email: string;
-  senha: string;
-  mensagemLogin: string;
+  viewLogin = true;
+
+  changeView() {
+    this.viewLogin = !this.viewLogin;
+  }
 
 }

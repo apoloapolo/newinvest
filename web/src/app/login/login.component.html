@@ -1,21 +1,63 @@
-<div class="flex h-3/4 justify-center content-center">
+<div *ngIf="viewLogin" class="flex h-3/4 justify-center content-center">
   <mat-card class="place-self-center self-center">
     <mat-card-content>
       <form class="flex flex-col items-center">
         <div class="mb-3 text-xl font-medium">Login</div>
         <mat-form-field class="w-96">
-          <input matInput placeholder="E-mail" [(ngModel)]="email">
+          <mat-label>E-mail</mat-label>
+          <input matInput #loginEmail placeholder="exemplo@email.com">
         </mat-form-field>
 
         <mat-form-field class="w-96">
-          <input matInput placeholder="Senha" [(ngModel)]="senha">
+          <mat-label>Senha</mat-label>
+          <input matInput #loginSenha type="password">
         </mat-form-field>
 
-        <span>
-          {{mensagemLogin}}
-        </span>
+        <button mat-raised-button
+                type="submit"
+                class="w-1/3"
+                >Entrar</button>
 
-        <button mat-raised-button type="submit">Entrar</button>
+        <button mat-button class="mt-5" (click)="changeView()">
+          <p class="text-red-600">Cadastro</p>
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div *ngIf="!viewLogin" class="flex h-3/4 justify-center content-center">
+  <mat-card class="place-self-center self-center">
+    <mat-card-content>
+      <form class="flex flex-col items-center">
+        <div class="mb-3 text-xl font-medium">Cadastro</div>
+
+        <mat-form-field class="w-96">
+          <mat-label>Nome</mat-label>
+          <input matInput #cadastroNome>
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>E-mail</mat-label>
+          <input matInput #cadastroEmail placeholder="exemplo@email.com">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>Senha</mat-label>
+          <input matInput #cadastroSenha type="password">
+        </mat-form-field>
+
+        <mat-checkbox #cadastroAdm
+                      class="place-self-start mb-4"
+                      [color]="'primary'">Administrador</mat-checkbox>
+
+        <button mat-raised-button
+                type="submit"
+                >Cadastrar</button>
+
+        <button mat-button class="mt-5" (click)="changeView()">
+          <p class="text-red-600">Login</p>
+        </button>
       </form>
     </mat-card-content>
   </mat-card>

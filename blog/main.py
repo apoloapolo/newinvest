@@ -1,13 +1,14 @@
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from bd import noticias
 
 app = Flask(__name__)
+CORS(app)
 
 # Consulta todas as notícias
 @app.route('/noticias', methods=['GET'])
 def obterNoticias():
     response = jsonify(noticias)
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 # Deleta notícia por ID
@@ -17,7 +18,6 @@ def excluirNoticia(id):
         if noticia.get('id') == id:
             del noticias[i]
             response = jsonify(noticia)
-            response.headers.add('Access-Control-Allow-Origin', '*')
             return response
 
 # Atualiza notícia por ID
@@ -29,7 +29,6 @@ def editarNoticia(id):
         if noticia.get('id') == id:
             noticias[i].update(noticiaEditada)
             response = jsonify(noticiaEditada)
-            response.headers.add('Access-Control-Allow-Origin', '*')
             return response
 
 # Cria notícia por ID
@@ -39,7 +38,6 @@ def criarNoticia():
     id = autoIncrementarId()
     pegaJson["id"] = id
     noticias.append(pegaJson)
-    pegaJson.headers.add('Access-Control-Allow-Origin', '*')
     return pegaJson
 
 def autoIncrementarId():

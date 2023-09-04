@@ -1,9 +1,11 @@
 import { DashboardService } from './../dashboard.service';
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import News from 'src/app/shared/models/news-model';
 import Simulation from 'src/app/shared/models/simulation-model';
 import Stock from 'src/app/shared/models/stock-model';
+import User from 'src/app/shared/models/user-model';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -17,24 +19,37 @@ export class DashboardPageComponent implements OnInit {
   viewBlog: boolean;
   viewStocksManager: boolean;
   viewBlogManager: boolean;
-
-  messageCreate: string;
+  viewMinhaConta: boolean;
+  viewDeletarConta: boolean;
   showMessageSimulator: boolean;
-
   isLoading: boolean;
+
+  groupValue: string = "today";
+  messageCreate: string;
+  messageUpdateUser: string;
 
   stocks: Stock[] = [];
   news: News[] = [];
   simulation: Simulation;
+  user: User;
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(
+    private dashboardService: DashboardService,
+    private router: Router
+    ) {}
 
   ngOnInit(): void {
-    this.getTodayStocks();
+    if (localStorage.getItem("user") == null) {
+      this.router.navigateByUrl('');
+    } else {
+      this.user = JSON.parse(localStorage.getItem("user"));
+      this.getTodayStocks();
+    }
   }
 
   changeView(value: string) {
     this.messageCreate = "";
+    this.messageUpdateUser = "";
     this.simulation = null;
     this.showMessageSimulator = false;
     if (value == "today") {
@@ -43,6 +58,7 @@ export class DashboardPageComponent implements OnInit {
       this.viewBlog = false;
       this.viewStocksManager = false;
       this.viewBlogManager = false;
+      this.viewMinhaConta = false;
       this.getTodayStocks();
     }
     if (value == "all") {
@@ -51,6 +67,7 @@ export class DashboardPageComponent implements OnInit {
       this.viewBlog = false;
       this.viewStocksManager = false;
       this.viewBlogManager = false;
+      this.viewMinhaConta = false;
       this.getAllStocks();
     }
     if (value == "simulator") {
@@ -59,6 +76,7 @@ export class DashboardPageComponent implements OnInit {
       this.viewBlog = false;
       this.viewStocksManager = false;
       this.viewBlogManager = false;
+      this.viewMinhaConta = false;
       this.getAllStocks();
     }
     if (value == "blog") {
@@ -67,6 +85,7 @@ export class DashboardPageComponent implements OnInit {
       this.viewBlog = true;
       this.viewStocksManager = false;
       this.viewBlogManager = false;
+      this.viewMinhaConta = false;
       this.getAllNews();
     }
     if (value == "stocksManager") {
@@ -75,6 +94,7 @@ export class DashboardPageComponent implements OnInit {
       this.viewBlog = false;
       this.viewStocksManager = true;
       this.viewBlogManager = false;
+      this.viewMinhaConta = false;
       this.getAllStocks();
     }
     if (value == "blogManager") {
@@ -83,6 +103,7 @@ export class DashboardPageComponent implements OnInit {
       this.viewBlog = false;
       this.viewStocksManager = false;
       this.viewBlogManager = true;
+      this.viewMinhaConta = false;
       this.getAllNews();
     }
   }
@@ -244,5 +265,65 @@ export class DashboardPageComponent implements OnInit {
       }
     );
     this.isLoading = false;
+  }
+
+  sair() {
+    localStorage.removeItem("user");
+    this.router.navigateByUrl('');
+  }
+
+  minhaConta() {
+    this.messageUpdateUser = "";
+    this.groupValue = null;
+    this.viewDeletarConta = false;
+    this.viewStocks = false;
+    this.viewSimulator = false;
+    this.viewBlog = false;
+    this.viewStocksManager = false;
+    this.viewBlogManager = false;
+    this.viewMinhaConta = true;
+  }
+
+  updateUser(nome: string, email: string, senha: string) {
+    this.isLoading = true;
+    const user = {
+      nome: nome,
+      email: email,
+      senha: senha,
+      is_admin: this.user.is_admin
+    }
+    const next = (): void => {
+      this.messageUpdateUser = "Dados atualizados com sucesso!";
+    }
+    const error = (): void => {
+      this.messageUpdateUser = "Erro ao atualizar os dados.";
+    }
+    this.dashboardService.updateUser(this.user.id, user)
+    .subscribe(
+      user => {
+        localStorage.setItem("user", JSON.stringify(user));
+        this.user = user;
+        this.messageUpdateUser = "Dados atualizados com sucesso!";
+      },
+      () => {
+        this.messageUpdateUser = "Erro ao atualizar os dados.";
+      }
+    ).add(() => {
+      this.isLoading = false;
+    });
+  }
+
+  deleteUser(id: number) {
+    this.isLoading = true;
+    const next = (): void => {
+      this.isLoading = false;
+      this.sair();
+    }
+    const error = (): void => {
+      this.messageUpdateUser = "Erro ao excluir a conta.";
+      this.isLoading = false;
+    }
+    this.dashboardService.deleteUser(id)
+    .subscribe({next, error})
   }
 }

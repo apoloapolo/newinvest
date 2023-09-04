@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     MatDividerModule,
     MatSelectModule,
+    MatCheckboxModule,
   ],
 })
 export class DashboardModule { }

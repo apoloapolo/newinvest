@@ -1,12 +1,14 @@
-<div class="w-full mt-9 flex justify-center">
-  <mat-button-toggle-group #group="matButtonToggleGroup" value="today" (change)="changeView(group.value)">
+<div class="w-full m-9 flex justify-center">
+  <mat-button-toggle-group [(ngModel)]="groupValue" [ngModelOptions]="{standalone: true}" (change)="changeView(groupValue)">
     <mat-button-toggle value="today">Ações de hoje</mat-button-toggle>
     <mat-button-toggle value="all">Todas as ações</mat-button-toggle>
     <mat-button-toggle value="simulator">Simulador</mat-button-toggle>
     <mat-button-toggle value="blog">Blog</mat-button-toggle>
-    <mat-button-toggle value="stocksManager">Gerenciar ações</mat-button-toggle>
-    <mat-button-toggle value="blogManager">Gerenciar blog</mat-button-toggle>
+    <mat-button-toggle *ngIf="user.is_admin" value="stocksManager">Gerenciar ações</mat-button-toggle>
+    <mat-button-toggle *ngIf="user.is_admin" value="blogManager">Gerenciar blog</mat-button-toggle>
   </mat-button-toggle-group>
+  <button mat-raised-button class="self-center ml-6" (click)="minhaConta()">Minha conta</button>
+  <button mat-raised-button class="self-center ml-6" color="warn" (click)="sair()">Sair</button>
 </div>
 
 <div *ngIf="viewStocks" class="m-6 flex flex-row flex-wrap justify-center">
@@ -37,6 +39,7 @@
         </span>
 
         <button mat-raised-button
+                color="primary"
                 type="submit"
                 class="w-1/3 self-center"
                 (click)="doSimulation(
@@ -97,6 +100,7 @@
 
         <div class="flex justify-between">
           <button mat-raised-button
+                  color="primary"
                   type="submit"
                   (click)="updateStock(stock.id,
                   nameUpdateInput.value,
@@ -104,11 +108,11 @@
                   variationUpdateInput.value,
                   dateUpdateInput.value)"
                   [disabled]="isLoading">Atualizar</button>
-          <button mat-raised-button
+          <button mat-button
                   color="warn"
                   type="reset"
                   (click)="deleteStock(stock.id)"
-                  [disabled]="isLoading">Excluir</button>
+                  [disabled]="isLoading"><b>Excluir</b></button>
         </div>
       </form>
     </mat-expansion-panel>
@@ -143,6 +147,7 @@
 
           <button mat-raised-button
                   type="submit"
+                  color="primary"
                   class="w-1/3 self-center"
                   (click)="createStock(
                   nameCreateInput.value,
@@ -176,18 +181,19 @@
           <textarea matInput #descriptionUpdateInput value="{{n.descricao}}"></textarea>
         </mat-form-field>
 
-        <div class="flex justify-between">
+        <div class="flex justify-between w-96">
           <button mat-raised-button
                   type="submit"
+                  color="primary"
                   (click)="updateNews(n.id,
                   titleUpdateInput.value,
                   descriptionUpdateInput.value)"
                   [disabled]="isLoading">Atualizar</button>
-          <button mat-raised-button
+          <button mat-button
                   color="warn"
                   type="reset"
                   (click)="deleteNews(n.id)"
-                  [disabled]="isLoading">Excluir</button>
+                  [disabled]="isLoading"><b>Excluir</b></button>
         </div>
       </form>
     </mat-expansion-panel>
@@ -212,6 +218,7 @@
 
           <button mat-raised-button
                   type="submit"
+                  color="primary"
                   class="w-1/3 self-center"
                   (click)="createNews(
                   titleCreateInput.value,
@@ -221,4 +228,65 @@
       </mat-card-content>
     </mat-card>
   </div>
+</div>
+
+<div *ngIf="viewMinhaConta" class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-card class="place-self-center self-center">
+    <mat-card-content>
+      <form class="flex flex-col">
+        <div class="mb-3 text-xl font-medium">Minha Conta</div>
+
+        <mat-form-field class="w-96">
+          <mat-label>Nome</mat-label>
+          <input matInput #nome value="{{user.nome}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>E-mail</mat-label>
+          <input matInput #email value="{{user.email}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96">
+          <mat-label>Senha</mat-label>
+          <input matInput #senha value="{{user.senha}}">
+        </mat-form-field>
+
+        <mat-checkbox
+          class="place-self-start mb-4"
+          [(ngModel)]="user.is_admin"
+          [ngModelOptions]="{standalone: true}"
+          [color]="'primary'"
+          [disabled]="true">Administrador</mat-checkbox>
+
+        <span class="mb-4 self-center">{{messageUpdateUser}}</span>
+
+        <div class="flex justify-between">
+          <button mat-raised-button
+                  type="submit"
+                  color="primary"
+                  (click)="updateUser(nome.value,
+                  email.value,
+                  senha.value)"
+                  [disabled]="isLoading">Atualizar Dados</button>
+          <button mat-button
+                  color="warn"
+                  (click)="viewDeletarConta = !viewDeletarConta"
+                  [disabled]="isLoading"><b>Excluir Conta</b></button>
+        </div>
+
+        <div *ngIf="viewDeletarConta" class="w-96 mt-6 grid grid-rows-2">
+          <span class="mb-2">Tem certeza que deseja excluir a conta? <b>Essa ação é irreversível.</b></span>
+          <div class="flex justify-center">
+            <button mat-stroked-button
+                    class="mr-4" color="warn"
+                    (click)="deleteUser(user.id)"><b>Sim</b></button>
+            <button mat-stroked-button
+                    class="ml-4"
+                    color="primary"
+                    (click)="viewDeletarConta = !viewDeletarConta"><b>Não</b></button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

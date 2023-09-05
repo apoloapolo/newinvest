@@ -7,7 +7,7 @@ import email.message
 usuarios_api_url = "http://127.0.0.1:8000/usuarioList/"
 
 # Configurações da API de Investimentos (substitua pelo URL correto)
-investimentos_api_url = "http://localhost:8080/stocks/"
+investimentos_api_url = "http://localhost:8080/stocks/stocks/"
 
 # Configurações de e-mail
 email_sender = 'seu_email@gmail.com'
@@ -83,5 +83,5 @@ def enviar_email(manda, ema):
 
 vamanho_nuinvest = 0
 while True:
-    time.sleep(0.5)
+    time.sleep(5)
     vamanho_nuinvest = manda_emails(vamanho_nuinvest)

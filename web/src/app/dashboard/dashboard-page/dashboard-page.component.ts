@@ -259,7 +259,6 @@ export class DashboardPageComponent implements OnInit {
     this.dashboardService.getSimulation(id, parseInt(days)).subscribe(
       simulation => {
         this.simulation = simulation as Simulation;
-        console.log(this.simulation);
         this.showMessageSimulator = true;
       }
     );

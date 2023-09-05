@@ -191,7 +191,6 @@ export class DashboardPageComponent implements OnInit {
     this.dashboardService.getAllNews().subscribe(
       news => {
         this.news = news as News[];
-        console.log(this.news);
       }
     );
   }

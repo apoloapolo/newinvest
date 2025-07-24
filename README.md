@@ -1,2 +1,2 @@
 # NewInvest
-Repositório para o projeto da disciplina de Sistemas Distribuídos.
+Repositório para o projeto NewInvest.

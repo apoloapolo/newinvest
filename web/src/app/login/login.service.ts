@@ -9,6 +9,7 @@ import User from '../shared/models/user-model';
 export class LoginService {
 
   readonly userUrl = 'http://localhost:8000/usuario';
+  readonly tokenUrl = 'http://localhost:8000/api';
 
   constructor(private http: HttpClient) { }
 

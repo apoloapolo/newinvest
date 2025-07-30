@@ -1,0 +1,34 @@
+<div class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-card>
+    <mat-card-content>
+      <form class="flex flex-col">
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Selecione uma ação</mat-label>
+          <mat-select #selectStockSimulation>
+            <mat-option *ngFor="let stock of stocks" value="{{stock.id}}">
+              <b>{{stock.name}}</b> | {{stock.price | currency: 'BRL'}} | {{stock.variation}}%
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Dias</mat-label>
+          <input matInput #daysStockSimulation>
+        </mat-form-field>
+
+        <span *ngIf="showMessageSimulator" class="mb-4 self-center w-96">
+          Em <b>{{simulation.dias}} dias</b>, esse investimento vai valer <b>{{simulation.simulacao | currency: 'BRL'}}</b>
+          e é considerado <b>{{simulation.sera}}</b>.
+        </span>
+
+        <button mat-stroked-button
+                type="submit"
+                class="w-1/3 self-center"
+                (click)="doSimulation(
+                selectStockSimulation.value,
+                daysStockSimulation.value)"
+                [disabled]="isLoading">Simular</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

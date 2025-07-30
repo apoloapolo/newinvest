@@ -1,0 +1,66 @@
+<div class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-accordion>
+    <div class="mb-3 text-xl font-medium text-center">Lista de notícias</div>
+    <mat-expansion-panel *ngFor="let n of news.slice().reverse();">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-medium w-96">
+          {{n.titulo}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form class="flex flex-col">
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Título</mat-label>
+          <input matInput #titleUpdateInput value="{{n.titulo}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput #descriptionUpdateInput value="{{n.descricao}}"></textarea>
+        </mat-form-field>
+
+        <div class="flex justify-between w-96">
+          <button mat-stroked-button
+                  type="submit"
+                  (click)="updateNews(n.id,
+                  titleUpdateInput.value,
+                  descriptionUpdateInput.value)"
+                  [disabled]="isLoading">Atualizar</button>
+          <button mat-button
+                  color="warn"
+                  type="reset"
+                  (click)="deleteNews(n.id)"
+                  [disabled]="isLoading"><b>Excluir</b></button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div>
+    <div class="mb-3 text-xl font-medium text-center">Adicionar notícia</div>
+    <mat-card>
+      <mat-card-content>
+        <form class="flex flex-col">
+          <mat-form-field class="w-96" color="warn">
+            <mat-label>Título</mat-label>
+            <input matInput #titleCreateInput>
+          </mat-form-field>
+
+          <mat-form-field class="w-96" color="warn">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput #descriptionCreateInput></textarea>
+          </mat-form-field>
+
+          <span class="mb-4 self-center">{{messageCreate}}</span>
+
+          <button mat-stroked-button
+                  type="submit"
+                  class="w-1/3 self-center"
+                  (click)="createNews(
+                  titleCreateInput.value,
+                  descriptionCreateInput.value)"
+                  [disabled]="isLoading">Adicionar</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+<div class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-card class="place-self-center self-center">
+    <mat-card-content>
+      <form class="flex flex-col">
+        <div class="mb-3 text-xl font-medium">Minha Conta</div>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Nome</mat-label>
+          <input matInput #nome value="{{ user.nome }}" />
+        </mat-form-field>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>E-mail</mat-label>
+          <input
+            matInput
+            #email
+            placeholder="exemplo@email.com"
+            (input)="validateEmail(email.value)"
+            value="{{ user.email }}"
+          />
+        </mat-form-field>
+        <div *ngIf="emailInvalido" class="text-xs text-red-500 mb-2 h-4">
+          <span>Digite um e-mail válido.</span>
+        </div>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Telefone</mat-label>
+          <input
+            matInput
+            #cadastroTelefone
+            placeholder="(00)00000-0000"
+            maxlength="14"
+            [value]="telefone"
+            (input)="onTelefoneInput($event)"
+            (keypress)="permitirApenasNumeros($event)"
+          />
+        </mat-form-field>
+        <div *ngIf="telefoneInvalido" class="text-xs text-red-500 mb-2 h-4">
+          <span>Digite um telefone válido no formato (xx)xxxxx-xxxx</span>
+        </div>
+
+        <button mat-button color="warn" [disabled]="isLoading">
+          Trocar Senha
+        </button>
+
+        <span class="mb-4 self-center">{{ messageUpdateUser }}</span>
+
+        <div class="flex justify-between">
+          <button
+            mat-stroked-button
+            type="submit"
+            (click)="updateUser(nome.value, email.value)"
+            [disabled]="isLoading || !isFormValid(nome.value, email.value)"
+          >
+            Atualizar Dados
+          </button>
+          <button
+            mat-button
+            color="warn"
+            (click)="viewDeletarConta = !viewDeletarConta"
+            [disabled]="isLoading"
+          >
+            <b>Excluir Conta</b>
+          </button>
+        </div>
+
+        <div *ngIf="viewDeletarConta" class="w-96 mt-6 grid grid-rows-2">
+          <span class="mb-2"
+            >Tem certeza que deseja excluir a conta?
+            <b>Esta ação é irreversível.</b></span
+          >
+          <div class="flex justify-center">
+            <button
+              mat-stroked-button
+              class="mr-4"
+              color="warn"
+              (click)="deleteUser(user.id)"
+            >
+              <b>Sim</b>
+            </button>
+            <button
+              mat-stroked-button
+              class="ml-4"
+              (click)="viewDeletarConta = !viewDeletarConta"
+            >
+              <b>Não</b>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

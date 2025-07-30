@@ -1,0 +1,23 @@
+<div class="m-9 flex justify-center">
+  <mat-button-toggle-group [(ngModel)]="groupValue" [ngModelOptions]="{standalone: true}" (change)="changeView(groupValue)">
+    <mat-button-toggle value="stocks">Ações</mat-button-toggle>
+    <mat-button-toggle value="simulator">Simulador</mat-button-toggle>
+    <mat-button-toggle value="blog">Blog</mat-button-toggle>
+    <mat-button-toggle *ngIf="user.is_admin" value="stocksManager">Gerenciar ações</mat-button-toggle>
+    <mat-button-toggle *ngIf="user.is_admin" value="blogManager">Gerenciar blog</mat-button-toggle>
+    <mat-button-toggle value="myAccount">Minha conta</mat-button-toggle>
+  </mat-button-toggle-group>
+  <button mat-raised-button class="self-center ml-6" color="warn" (click)="sair()">Sair</button>
+</div>
+
+<app-stocks *ngIf="viewStocks"></app-stocks>
+
+<app-simulation *ngIf="viewSimulator"></app-simulation>
+
+<app-blog *ngIf="viewBlog"></app-blog>
+
+<app-manage-stocks *ngIf="viewStocksManager"></app-manage-stocks>
+
+<app-manage-blog *ngIf="viewBlogManager"></app-manage-blog>
+
+<app-my-account *ngIf="viewMinhaConta"></app-my-account>

@@ -63,6 +63,7 @@ export class DashboardService {
 
   // User
   updateUser(id: number, user: User): Observable<User> {
+    console.log(`${this.userUrl}/${id}/`, user)
     return this.http.put<User>(`${this.userUrl}/${id}/`, user);
   }
 

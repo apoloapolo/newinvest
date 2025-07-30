@@ -1,0 +1,13 @@
+<div class="m-8 flex flex-col flex-wrap justify-center">
+  <mat-card *ngFor="let n of news.reverse();" class="m-4 w-1/2 self-center">
+    <mat-card-header class="mb-4">
+      <mat-card-title class="text-xl font-medium">{{n.titulo}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="mt-4 first-letter:text-7xl first-letter:font-bold first-letter:mr-3 first-letter:float-left whitespace-pre-line">
+      {{n.descricao}}
+    </mat-card-content>
+  </mat-card>
+</div>

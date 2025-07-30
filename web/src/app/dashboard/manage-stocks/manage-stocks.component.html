@@ -1,0 +1,93 @@
+<div class="m-12 flex flex-row flex-wrap justify-center gap-20">
+  <mat-accordion>
+    <div class="mb-3 text-xl font-medium text-center">Lista de ações</div>
+    <mat-expansion-panel *ngFor="let stock of stocks">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="font-medium">
+          {{stock.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+          <p>{{stock.date}}</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form class="flex flex-col">
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Nome</mat-label>
+          <input matInput #nameUpdateInput value="{{stock.name}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Preço</mat-label>
+          <input matInput #priceUpdateInput type="number" value="{{stock.price}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Variação</mat-label>
+          <input matInput #variationUpdateInput type="number" value="{{stock.variation}}">
+        </mat-form-field>
+
+        <mat-form-field class="w-96" color="warn">
+          <mat-label>Data</mat-label>
+          <input matInput #dateUpdateInput value="{{stock.date}}">
+        </mat-form-field>
+
+        <div class="flex justify-between">
+          <button mat-stroked-button
+                  type="submit"
+                  (click)="updateStock(stock.id,
+                  nameUpdateInput.value,
+                  priceUpdateInput.value,
+                  variationUpdateInput.value,
+                  dateUpdateInput.value)"
+                  [disabled]="isLoading">Atualizar</button>
+          <button mat-button
+                  color="warn"
+                  type="reset"
+                  (click)="deleteStock(stock.id)"
+                  [disabled]="isLoading"><b>Excluir</b></button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div>
+    <div class="mb-3 text-xl font-medium text-center">Adicionar ação</div>
+    <mat-card>
+      <mat-card-content>
+        <form class="flex flex-col">
+          <mat-form-field class="w-96" color="warn">
+            <mat-label>Nome</mat-label>
+            <input matInput #nameCreateInput>
+          </mat-form-field>
+
+          <mat-form-field class="w-96" color="warn">
+            <mat-label>Preço</mat-label>
+            <input matInput #priceCreateInput type="number">
+          </mat-form-field>
+
+          <mat-form-field class="w-96" color="warn">
+            <mat-label>Variação</mat-label>
+            <input matInput #variationCreateInput type="number">
+          </mat-form-field>
+
+          <mat-form-field class="w-96" color="warn">
+            <mat-label>Data</mat-label>
+            <input matInput #dateCreateInput>
+          </mat-form-field>
+
+          <span class="mb-4 self-center">{{messageCreate}}</span>
+
+          <button mat-stroked-button
+                  type="submit"
+                  class="w-1/3 self-center"
+                  (click)="createStock(
+                  nameCreateInput.value,
+                  priceCreateInput.value,
+                  variationCreateInput.value,
+                  dateCreateInput.value)"
+                  [disabled]="isLoading">Adicionar</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

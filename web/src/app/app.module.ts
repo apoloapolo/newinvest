@@ -25,6 +25,7 @@ registerLocaleData(localePt);
     SharedModule,
     BrowserAnimationsModule,
     LoginModule,
+
   ],
   providers: [
     {provide: LOCALE_ID, useValue: 'pt-BR'}

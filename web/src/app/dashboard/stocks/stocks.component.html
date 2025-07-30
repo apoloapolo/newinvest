@@ -1,0 +1,9 @@
+<div class="m-6 flex justify-center">
+  <mat-button-toggle-group [(ngModel)]="groupValue" [ngModelOptions]="{standalone: true}" (change)="changeView(groupValue)">
+    <mat-button-toggle value="today">Ações de hoje</mat-button-toggle>
+    <mat-button-toggle value="all">Todas as Ações</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+<div class="m-6 flex flex-row flex-wrap justify-center">
+  <app-stock-card *ngFor="let stock of stocks" [stock]="stock"></app-stock-card>
+</div>

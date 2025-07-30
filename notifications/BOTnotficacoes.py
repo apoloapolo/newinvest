@@ -6,7 +6,7 @@ import random
 
 TOKEN = "8340065304:AAGoaZ-r0XifB-RQYzy3flszpZNK7p0iH6g"
 BASE_URL = f"https://api.telegram.org/bot{TOKEN}/"
-ARQUIVO_USUARIOS = "usuarios.csv"
+ARQUIVO_USUARIOS = "notifications/usuarios.csv"
 DIGITOS_CODIGO = 6
 
 # Envia mensagem para o usuário

@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 import csv
 import os
+from flask_cors import CORS
 from BOTnotficacoes import ARQUIVO_USUARIOS, gerar_codigo_auth, send_message
 
 app = Flask(__name__)
+CORS(app)
 
 # Obtém o código atual do telefone
 def obter_codigo_por_telefone(telefone):

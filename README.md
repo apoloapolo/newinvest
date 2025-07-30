@@ -1,10 +1,7 @@
----
-
 # 📈 NewInvest
 
 **NewInvest** é uma plataforma completa e distribuída para monitoramento de ações, projeções de investimentos e educação financeira por meio de um blog informativo.
 
----
 
 ## ⚙️ Módulos do Sistema
 
